@@ -93,19 +93,33 @@
       text-align: center;
     }
 
+    .countdown {
+      color: #ffcccb;
+      font-size: 5em;
+      font-weight: bold;
+      animation: countdownAnimation 1s steps(1, end) infinite;
+    }
+
+    @keyframes countdownAnimation {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
     .surprise-message {
+      position: absolute;
       color: #fff;
       font-size: 2em;
-      margin-bottom: 20px;
       opacity: 0;
-      animation: fadeIn 2s ease forwards;
+      animation: floatText 5s infinite ease-in-out;
       font-weight: bold;
       text-shadow: 0 0 10px #ff4e6e, 0 0 20px #ff4e6e;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
+    @keyframes floatText {
+      0% { opacity: 0; transform: translate(-50%, 0); }
+      50% { opacity: 1; transform: translate(50%, -50%); }
+      100% { opacity: 0; transform: translate(-50%, -100%); }
     }
 
     .falling-heart {
@@ -125,7 +139,7 @@
       position: absolute;
       width: 30px;
       height: 30px;
-      background-color: #ff4e6e;
+      background-color: inherit;
       border-radius: 50%;
     }
     .falling-heart::before {
@@ -157,8 +171,45 @@
       font-weight: bold;
       box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.2);
     }
+
+        /* Popup for the question */
+        .question-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      color: #fff;
+      z-index: 1010;
+    }
+
+    .question-box {
+      background-color: rgba(0, 0, 0, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    }
+
+    .question-button {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #ff4e6e;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .question-button:hover {
+      background-color: #ffcccb;
+    }
   </style>
-<!-- Google tag (gtag.js) -->
+
+  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-68J4SW2DDN"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -174,14 +225,34 @@
   <header>Hadeel</header>
   
   <div class="message">
-You are my Everything hadoosh
+    You are my Everything hadoosh
   </div>
 
-  <button class="button" onclick="showOverlay()">Click Here for a Surprise!</button>
+  <button class="button" onclick="askQuestion()">Click Here for a Surprise!</button>
+</div>
+<!-- Popup for the question -->
+<div class="question-overlay" id="question-overlay">
+  <div class="question-box">
+    <p>How much do you think I love you? (Think please)</p>
+    <div>
+      <button class="question-button" onclick="checkAnswer(0)">0</button>
+      <button class="question-button" onclick="checkAnswer(2)">2</button>
+      <button class="question-button" onclick="checkAnswer(3)">3</button>
+      <button class="question-button" onclick="checkAnswer(4)">4</button>
+      <button class="question-button" onclick="checkAnswer(8)">8</button>
+      <button class="question-button" onclick="checkAnswer(10)">10</button>
+    </div>
+  </div>
 </div>
 
 <div class="overlay" id="overlay">
-  <div class="surprise-message">Every beat of this heart is for you, Hadeel ❤️</div>
+  <div class="countdown" id="countdown">5</div>
+  <div class="surprise-message" id="surprise-message-1" style="display: none;">حبيبتي</div>
+  <div class="surprise-message" id="surprise-message-2" style="display: none;">مشتقلك</div>
+  <div class="surprise-message" id="surprise-message-3" style="display: none;">حبيبتي الغالية</div>
+  <div class="surprise-message" id="surprise-message-4" style="display: none;">هدولتي</div>
+  <div class="surprise-message" id="surprise-message-5" style="display: none;">يا عمري</div>
+  <div class="surprise-message" id="surprise-message-6" style="display: none;">love is you</div>
   <button class="button" onclick="hideOverlay()">Close</button>
 </div>
 
@@ -190,14 +261,64 @@ You are my Everything hadoosh
 </footer>
 
 <script>
-  function showOverlay() {
+   function askQuestion() {
+    document.getElementById('question-overlay').style.display = 'flex';
+  }
+
+  function checkAnswer(answer) {
+    if (answer === 10) {
+      document.getElementById('question-overlay').style.display = 'none';
+      startCountdown();
+    } else {
+      alert('Try again, Think more carefully!');
+    }
+  }
+  function startCountdown() {
     document.getElementById('overlay').style.display = 'flex';
+    let countdown = 5;
+    const countdownElement = document.getElementById('countdown');
+    countdownElement.textContent = countdown;
+
+    const interval = setInterval(() => {
+      countdown--;
+      countdownElement.textContent = countdown;
+      if (countdown === 0) {
+        clearInterval(interval);
+        showSurprise();
+      }
+    }, 1000);
+  }
+
+  function showSurprise() {
+    document.getElementById('countdown').style.display = 'none';
+    createFloatingMessages();
+    createFloatingMessages2();
     createFallingHearts();
+  }
+
+  function createFloatingMessages() {
+    const messages = ['حبيبتي', 'مشتقلك', 'حبيبتي الغالية'];
+    messages.forEach((text, index) => {
+      const message = document.getElementById(`surprise-message-${index + 1}`);
+      message.style.display = 'block';
+      message.style.left = Math.random() * 80 + 'vw';
+      message.style.top = Math.random() * 80 + 'vh';
+    });
+  }
+  function createFloatingMessages2() {
+    const messages = ['هدولتي', 'يا عمري', 'love is you'];
+    messages.forEach((text, index) => {
+      const message = document.getElementById(`surprise-message-${index + 3}`);
+      message.style.display = 'block';
+      message.style.left = Math.random() * 80 + 'vw';
+      message.style.top = Math.random() * 80 + 'vh';
+    });
   }
 
   function hideOverlay() {
     document.getElementById('overlay').style.display = 'none';
     document.querySelectorAll('.falling-heart').forEach(heart => heart.remove());
+    document.querySelectorAll('.surprise-message').forEach(message => message.style.display = 'none');
   }
 
   function createFallingHearts() {
@@ -206,8 +327,14 @@ You are my Everything hadoosh
       heart.classList.add('falling-heart');
       heart.style.left = Math.random() * 100 + 'vw';
       heart.style.animationDuration = 2 + Math.random() * 3 + 's';
+      heart.style.backgroundColor = getRandomColor();
       document.getElementById('overlay').appendChild(heart);
     }
+  }
+
+  function getRandomColor() {
+    const colors = ['#fc03c6', '#fc031c', '#fcfc03', '#f5f5f0'];
+    return colors[Math.floor(Math.random() * colors.length)];
   }
 </script>
 
