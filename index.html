@@ -12,7 +12,7 @@
     }
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #ff8a9a, #ff758f);
+      background: linear-gradient(135deg, #ff8ae6, #f834c7);
       color: #fff;
       overflow-x: hidden;
       display: flex;
@@ -121,6 +121,14 @@
       50% { opacity: 1; transform: translate(50%, -50%); }
       100% { opacity: 0; transform: translate(-50%, -100%); }
     }
+    .falling-text {
+    position: absolute;
+    top: -50px;
+    font-size: 20px;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
 
     .falling-heart {
       position: absolute;
@@ -209,7 +217,7 @@
     }
   </style>
 
-  <!-- Google tag (gtag.js) -->
+    <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-68J4SW2DDN"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -222,18 +230,18 @@
 <body>
 
 <div class="container">
-  <header>Hadeel</header>
+  <header>هدولتي</header>
   
   <div class="message">
-    
+ يا حبيبتي
   </div>
 
-  <button class="button" onclick="askQuestion()">ِAnswer question</button>
+  <button class="button" onclick="askQuestion()">Answer question</button>
 </div>
 <!-- Popup for the question -->
 <div class="question-overlay" id="question-overlay">
   <div class="question-box">
-    <p>How much do you think I love you? </p>
+    <p>How much do you think I love you */10 ? </p>
     <div>
       <button class="question-button" onclick="checkAnswer(0)">0</button>
       <button class="question-button" onclick="checkAnswer(2)">2</button>
@@ -253,7 +261,7 @@
   <div class="surprise-message" id="surprise-message-4" style="display: none;">هدولتي</div>
   <div class="surprise-message" id="surprise-message-5" style="display: none;">يا عمري</div>
   <div class="surprise-message" id="surprise-message-6" style="display: none;">love is you</div>
-  <button class="button" onclick="hideOverlay()">Love you</button>
+  <button class="button" onclick="hideOverlay()">Close</button>
 </div>
 
 <footer>
@@ -323,14 +331,32 @@
 
   function createFallingHearts() {
     for (let i = 0; i < 30; i++) {
-      const heart = document.createElement('div');
-      heart.classList.add('falling-heart');
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.animationDuration = 2 + Math.random() * 3 + 's';
-      heart.style.backgroundColor = getRandomColor();
-      document.getElementById('overlay').appendChild(heart);
+        const heart = document.createElement('div');
+        heart.classList.add('falling-heart');
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = 2 + Math.random() * 3 + 's';
+        heart.style.backgroundColor = getRandomColor();
+        document.getElementById('overlay').appendChild(heart);
+
+        // Add a "love" text element to fall with hearts
+        const loveText = document.createElement('div');
+        loveText.classList.add('falling-text');
+        loveText.innerText = 'بحبك';
+        loveText.style.left = Math.random() * 100 + 'vw';
+        loveText.style.animationDuration = 2 + Math.random() * 3 + 's';
+        loveText.style.color = getRandomColor();
+        document.getElementById('overlay').appendChild(loveText);
+
+        const loveText2 = document.createElement('div');
+        loveText2.classList.add('falling-text');
+        loveText2.innerText = 'كتير';
+        loveText2.style.left = Math.random() * 100 + 'vw';
+        loveText2.style.animationDuration = 2 + Math.random() * 3 + 's';
+        loveText2.style.color = getRandomColor();
+        document.getElementById('overlay').appendChild(loveText2);
     }
-  }
+}
+
 
   function getRandomColor() {
     const colors = ['#fc03c6', '#fc031c', '#fcfc03', '#f5f5f0'];
